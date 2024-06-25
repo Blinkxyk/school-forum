@@ -42,17 +42,9 @@ public class SwaggerConfiguration {
     @Bean
     public OpenAPI springShopOpenAPI() {
         return new OpenAPI()
-                .info(new Info().title("示例项目 API 文档")
-                        .description("欢迎来到本示例项目API测试文档，在这里可以快速进行接口调试")
+                .info(new Info().title("校园论坛项目 API 文档")
+                        .description("欢迎来到朱邓黄徐的项目API测试文档，在这里可以快速进行接口调试")
                         .version("1.0")
-                        .license(new License()
-                                .name("项目开源地址")
-                                .url("https://github.com/Ketuer/SpringBoot-Vue-Template-Jwt")
-                        )
-                )
-                .externalDocs(new ExternalDocumentation()
-                        .description("我们的官方网站")
-                        .url("https://itbaima.net")
                 );
     }
 
