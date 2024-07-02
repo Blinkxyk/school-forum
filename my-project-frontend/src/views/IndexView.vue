@@ -2,12 +2,11 @@
 import {get, logout} from '@/net'
 import router from "@/router";
 import {useStore} from "@/store";
-import {onMounted, reactive, ref, watch} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {
     Back,
     Bell,
-    ChatDotSquare, Check, Collection, DataLine,
-    Document, Files,
+    ChatDotSquare, Check, Collection,
     Location, Lock, Message, Monitor,
     Notification, Operation,
     Position,
@@ -71,12 +70,13 @@ function deleteAllNotification() {
         }
     });
 }*/
-
+let isSearching = ref(false);
 const searchTopics = () => {
     if (!searchInput.text.trim()) {
         ElMessage.warning('请输入搜索关键词');
         return;
     }
+    isSearching = true;
     const url = `/api/forum/search-topic?title=${encodeURIComponent(searchInput.text)}`;
     get(url, (data) => {
         if (data && data.length > 0) {
@@ -90,6 +90,7 @@ const searchTopics = () => {
             ElMessage.info('未找到相关帖子');
         }
     });
+    isSearching = false;
 }
 
 /*watch(() => store.searchResults, () => {
@@ -101,9 +102,11 @@ const loadSearchResults = () => {
     topics.end = false;
     topics.list = store.searchResults;
 }
-
+function handleCommand(command) {
+    router.push(command);
+}
 onMounted(() => {
-    if (store.searchResults.length === 0) {
+    if (isSearching===true&&store.searchResults.length === 0) {
         ElMessage.info('未找到相关帖子');
     } else {
         loadSearchResults();
@@ -167,27 +170,29 @@ onMounted(() => {
                         <div>{{ store.user.username }}</div>
                         <div>{{ store.user.email }}</div>
                     </div>
-                    <el-dropdown>
+                    <el-dropdown @command="handleCommand">
                         <el-avatar :src="store.avatarUrl"/>
                         <template #dropdown>
-                            <el-dropdown-item>
-                                <el-icon>
-                                    <Operation/>
-                                </el-icon>
-                                个人设置
-                            </el-dropdown-item>
-                            <el-dropdown-item>
-                                <el-icon>
-                                    <Message/>
-                                </el-icon>
-                                消息列表
-                            </el-dropdown-item>
-                            <el-dropdown-item @click="userLogout" divided>
-                                <el-icon>
-                                    <Back/>
-                                </el-icon>
-                                退出登录
-                            </el-dropdown-item>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item command="/index/user-setting">
+                                    <el-icon>
+                                        <Operation/>
+                                    </el-icon>
+                                    个人设置
+                                </el-dropdown-item>
+                                <el-dropdown-item command="/index/privacy-setting">
+                                    <el-icon>
+                                        <Message/>
+                                    </el-icon>
+                                    安全设置
+                                </el-dropdown-item>
+                                <el-dropdown-item @click="userLogout" divided>
+                                    <el-icon>
+                                        <Back/>
+                                    </el-icon>
+                                    退出登录
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
                         </template>
                     </el-dropdown>
                 </div>
@@ -226,20 +231,12 @@ onMounted(() => {
                                 <el-menu-item>
                                     <template #title>
                                         <el-icon>
-                                            <Notification/>
-                                        </el-icon>
-                                        校园活动
-                                    </template>
-                                </el-menu-item>
-                                <el-menu-item>
-                                    <template #title>
-                                        <el-icon>
                                             <Umbrella/>
                                         </el-icon>
                                         表白墙
                                     </template>
                                 </el-menu-item>
-                                <el-menu-item>
+<!--                                <el-menu-item>
                                     <template #title>
                                         <el-icon>
                                             <School/>
@@ -247,7 +244,7 @@ onMounted(() => {
                                         海文考研
                                         <el-tag style="margin-left: 10px" size="small">合作机构</el-tag>
                                     </template>
-                                </el-menu-item>
+                                </el-menu-item>-->
                             </el-sub-menu>
                             <el-sub-menu index="2">
                                 <template #title>
@@ -259,25 +256,9 @@ onMounted(() => {
                                 <el-menu-item>
                                     <template #title>
                                         <el-icon>
-                                            <Document/>
-                                        </el-icon>
-                                        成绩查询
-                                    </template>
-                                </el-menu-item>
-                                <el-menu-item>
-                                    <template #title>
-                                        <el-icon>
-                                            <Files/>
-                                        </el-icon>
-                                        班级课程表
-                                    </template>
-                                </el-menu-item>
-                                <el-menu-item>
-                                    <template #title>
-                                        <el-icon>
                                             <Monitor/>
                                         </el-icon>
-                                        教务通知
+                                        教务系统
                                     </template>
                                 </el-menu-item>
                                 <el-menu-item>
@@ -286,14 +267,6 @@ onMounted(() => {
                                             <Collection/>
                                         </el-icon>
                                         在线图书馆
-                                    </template>
-                                </el-menu-item>
-                                <el-menu-item>
-                                    <template #title>
-                                        <el-icon>
-                                            <DataLine/>
-                                        </el-icon>
-                                        预约教室
                                     </template>
                                 </el-menu-item>
                             </el-sub-menu>
