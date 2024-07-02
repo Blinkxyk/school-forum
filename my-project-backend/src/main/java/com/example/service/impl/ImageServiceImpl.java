@@ -40,7 +40,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageStoreMapper, StoreImage> 
     @Override
     public void fetchImageFromMinio(OutputStream stream, String image) throws Exception {
         GetObjectArgs args = GetObjectArgs.builder()
-                .bucket("study")
+                .bucket("school-forum")
                 .object(image)
                 .build();
         GetObjectResponse response = client.getObject(args);

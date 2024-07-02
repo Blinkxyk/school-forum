@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -47,4 +48,10 @@ public interface TopicMapper extends BaseMapper<Topic> {
              where db_topic_interact_collect.uid = #{uid}
             """)
     List<Topic> collectTopics(int uid);
+
+    @Select("""
+            select * from db_topic
+            where title like CONCAT('%',#{title},'%')
+            """)
+    List<Topic> searchTopicsByTitle(@Param("title") String title);//搜索功能
 }

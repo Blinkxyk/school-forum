@@ -18,7 +18,6 @@ import {get} from "@/net";
 import {ElMessage} from "element-plus";
 import TopicEditor from "@/components/TopicEditor.vue";
 import {useStore} from "@/store";
-import axios from "axios";
 import ColorDot from "@/components/ColorDot.vue";
 import router from "@/router";
 import TopicTag from "@/components/TopicTag.vue";
@@ -197,7 +196,7 @@ navigator.geolocation.getCurrentPosition(position => {
                         <div>{{today}}</div>
                     </div>
                     <div class="info-text">
-                        <div>当期IP地址</div>
+                        <div>当前IP地址</div>
                         <div>127.0.0.1</div>
                     </div>
                 </light-card>
@@ -208,14 +207,9 @@ navigator.geolocation.getCurrentPosition(position => {
                 </div>
                 <div style="display: grid;grid-template-columns: repeat(2, 1fr);grid-gap: 10px;margin-top: 10px">
                     <div class="friend-link">
-                        <el-image style="height: 100%" src="https://element-plus.org/images/js-design-banner.jpg"/>
+                        <el-image style="height: 100%" src="https://www.cse.cqu.edu.cn/img/20231025121046.png"/>
                     </div>
-                    <div class="friend-link">
-                        <el-image style="height: 100%" src="https://element-plus.org/images/vform-banner.png"/>
-                    </div>
-                    <div class="friend-link">
-                        <el-image style="height: 100%" src="https://element-plus.org/images/sponsors/jnpfsoft.jpg"/>
-                    </div>
+
                 </div>
             </div>
         </div>
