@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.entity.RestBean;
 import com.example.entity.dto.Interact;
+import com.example.entity.dto.Topic;
 import com.example.entity.vo.request.AddCommentVO;
 import com.example.entity.vo.request.TopicCreateVO;
 import com.example.entity.vo.request.TopicUpdateVO;
@@ -14,10 +15,13 @@ import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/forum")
@@ -109,4 +113,26 @@ public class ForumController {
         topicService.deleteComment(id, uid);
         return RestBean.success();
     }
+    // 新添加的通过标题搜索Topic的方法
+    @GetMapping("/search-topic")
+    public RestBean<List<TopicPreviewVO>> searchTopicsByTitle(@RequestParam String title) {
+        List<Topic> topics = topicService.searchTopicsByTitle(title);
+        if (topics.isEmpty()) {
+            return RestBean.success(Collections.emptyList());
+        }
+
+        List<TopicPreviewVO> previewVOs = topics.stream()
+                .map(this::convertToTopicPreviewVO)
+                .collect(Collectors.toList());
+        return RestBean.success(previewVOs);
+    }
+
+    private TopicPreviewVO convertToTopicPreviewVO(Topic topic) {
+        TopicPreviewVO vo = new TopicPreviewVO();
+        BeanUtils.copyProperties(topic, vo);
+        // 如果TopicPreviewVO需要额外的数据处理，可以在这里添加
+        // 例如，vo.setSomeField(computeSomeValue(topic));
+        return vo;
+    }
+
 }

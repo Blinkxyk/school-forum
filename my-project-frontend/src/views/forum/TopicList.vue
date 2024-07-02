@@ -18,7 +18,6 @@ import {get} from "@/net";
 import {ElMessage} from "element-plus";
 import TopicEditor from "@/components/TopicEditor.vue";
 import {useStore} from "@/store";
-import axios from "axios";
 import ColorDot from "@/components/ColorDot.vue";
 import router from "@/router";
 import TopicTag from "@/components/TopicTag.vue";
@@ -179,7 +178,8 @@ navigator.geolocation.getCurrentPosition(position => {
                     </div>
                     <el-divider style="margin: 10px 0"/>
                     <div style="font-size: 14px;margin: 10px;color: grey">
-                        这里是校园论坛，畅所欲言吧
+                        为认真学习宣传贯彻党的二十大精神,深入贯彻习近平强军思想,
+                        作为迎接办学70周年系列学术活动之一,国防科技大学将于2022年11月24日至26日在长沙举办“国防科技
                     </div>
                 </light-card>
                 <light-card style="margin-top: 10px">
@@ -196,7 +196,7 @@ navigator.geolocation.getCurrentPosition(position => {
                         <div>{{today}}</div>
                     </div>
                     <div class="info-text">
-                        <div>当期IP地址</div>
+                        <div>当前IP地址</div>
                         <div>127.0.0.1</div>
                     </div>
                 </light-card>
@@ -205,7 +205,12 @@ navigator.geolocation.getCurrentPosition(position => {
                     友情链接
                     <el-divider style="margin: 10px 0"/>
                 </div>
+                <div style="display: grid;grid-template-columns: repeat(2, 1fr);grid-gap: 10px;margin-top: 10px">
+                    <div class="friend-link">
+                        <el-image style="height: 100%" src="https://www.cse.cqu.edu.cn/img/20231025121046.png"/>
+                    </div>
 
+                </div>
             </div>
         </div>
         <topic-editor :show="editor" @success="onTopicCreate" @close="editor = false"/>

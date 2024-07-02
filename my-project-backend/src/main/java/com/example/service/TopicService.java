@@ -12,6 +12,7 @@ import com.example.entity.vo.response.TopicDetailVO;
 import com.example.entity.vo.response.TopicPreviewVO;
 import com.example.entity.vo.response.TopicTopVO;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface TopicService extends IService<Topic> {
@@ -26,4 +27,6 @@ public interface TopicService extends IService<Topic> {
     String createComment(int uid, AddCommentVO vo);
     List<CommentVO> comments(int tid, int pageNumber);
     void deleteComment(int id, int uid);
+
+    List<Topic> searchTopicsByTitle(String title);
 }

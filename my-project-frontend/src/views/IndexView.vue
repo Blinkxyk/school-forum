@@ -2,8 +2,7 @@
 import {get, logout} from '@/net'
 import router from "@/router";
 import {useStore} from "@/store";
-import {reactive, ref} from "vue";
-import { useDark, useToggle } from '@vueuse/core';
+import {onMounted, reactive, ref, watch} from "vue";
 import {
     Back,
     Bell,
@@ -15,11 +14,17 @@ import {
     School, Search,
     Umbrella, User
 } from "@element-plus/icons-vue";
-
 import LightCard from "@/components/LightCard.vue";
+import {ElMessage} from "element-plus";
+import {useDark, useToggle} from "@vueuse/core/index";
 
 const store = useStore()
 const loading = ref(true)
+const topics = reactive({
+    list: [],
+    page: 0,
+    end: false,
+});
 
 const searchInput = reactive({
     type: '1',
@@ -49,40 +54,97 @@ function confirmNotification(id, url) {
 function deleteAllNotification() {
     get(`/api/notification/delete-all`, loadNotification)
 }
-function handleCommand(command) {
-  router.push(command);
+
+// 搜索帖子的函数
+/*function searchTopics() {
+    store.searchResults = null; // 清空搜索结果;
+    if (!searchInput.text.trim()) {
+        ElMessage.warning('请输入搜索关键词');
+        return;
+    }
+    const url = `/api/forum/search-topic?title=${encodeURIComponent(searchInput.text)}`;
+    get(url, (data) => {
+        if (data && data.length > 0) {
+            store.searchResults = data; // 假设你在store中定义了searchResults来存储搜索结果
+            router.push('/index/search-results/'+searchInput.text); // 假设你有一个显示搜索结果的路由
+        } else {
+            ElMessage.info('未找到相关帖子');
+        }
+    });
+}*/
+let isSearching = ref(false);
+const searchTopics = () => {
+    if (!searchInput.text.trim()) {
+        ElMessage.warning('请输入搜索关键词');
+        return;
+    }
+    isSearching=true;
+    const url = `/api/forum/search-topic?title=${encodeURIComponent(searchInput.text)}`;
+    get(url, (data) => {
+        if (data && data.length > 0) {
+            topics.list = data;
+
+            store.searchResults = data; // 更新 store 中的搜索结果
+            router.push('/index/search-results/'+searchInput.text);
+        } else {
+            topics.list = [];
+            ElMessage.info('未找到相关帖子');
+        }
+    });
+    isSearching=false;
 }
-const isDark = ref(useDark());
-const toggleDarkMode = useToggle(isDark);
+
+/*watch(() => store.searchResults, () => {
+    loadSearchResults();
+}, { immediate: true });*/
+
+const loadSearchResults = () => {
+    topics.page = 0;
+    topics.end = false;
+    topics.list = store.searchResults;
+}
+
+onMounted(() => {
+    if (store.searchResults.length === 0&&isSearching.value) {
+        ElMessage.info('未找到相关帖子');
+    } else {
+        loadSearchResults();
+    }
+});
+function handleCommand(command) {
+    router.push(command);
+}
+const isDark = useDark()
+const toggleDarkMode = useToggle(isDark)
 </script>
 
 <template>
     <div class="main-content" v-loading="loading" element-loading-text="正在进入，请稍后...">
         <el-container style="height: 100%" v-if="!loading">
             <el-header class="main-content-header">
-                <el-image class="logo" src="https://element-plus.org/images/element-plus-logo.svg"/>
+                <el-image class="logo" src="https://www.cse.cqu.edu.cn/img/20231025121046.png"/>
                 <div style="flex: 1;padding: 0 20px;text-align: center">
-                    <el-input v-model="searchInput.text" style="width: 100%;max-width: 500px"
-                              placeholder="搜索论坛相关内容...">
-                        <template #prefix>
-                            <el-icon>
-                                <Search/>
-                            </el-icon>
-                        </template>
-                        <template #append>
-                            <el-select style="width: 120px" v-model="searchInput.type">
-                                <el-option value="1" label="帖子广场"/>
-                                <el-option value="2" label="校园活动"/>
-                                <el-option value="3" label="表白墙"/>
-                                <el-option value="4" label="教务通知"/>
-                            </el-select>
-                        </template>
+                    <el-input v-model="searchInput.text" placeholder="搜索论坛相关内容..."
+                              @keyup.enter="searchTopics">
+                    style="width: 100%; max-width: 500px">
+                    <template #prefix>
+                        <el-icon @click="searchTopics"><Search/></el-icon>
+                    </template>
+                    <template #append>
+                        <el-select style="width: 120px" v-model="searchInput.type">
+                            <el-option value="1" label="帖子广场"/>
+                            <el-option value="2" label="校园活动"/>
+                            <el-option value="3" label="表白墙"/>
+                            <el-option value="4" label="教务通知"/>
+                        </el-select>
+                    </template>
                     </el-input>
+
                 </div>
                 <div class="user-info">
-                  <el-button @click="toggleDarkMode">
-                    切换到 {{ isDark.value ? '浅色' : '深色' }} 模式
-                  </el-button>
+                    <el-button @click="toggleDarkMode">
+                        切换到 {{ isDark ? '浅色' : '深色' }} 模式
+                    </el-button>
                     <el-popover placement="bottom" :width="350" trigger="click">
                         <template #reference>
                             <el-badge style="margin-right: 15px" is-dot :hidden="!notification.length">
@@ -118,26 +180,26 @@ const toggleDarkMode = useToggle(isDark);
                     <el-dropdown @command="handleCommand">
                         <el-avatar :src="store.avatarUrl"/>
                         <template #dropdown>
-                          <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item command="/index/user-setting">
-                                <el-icon>
-                                    <Operation/>
-                                </el-icon>
-                                个人设置
-                            </el-dropdown-item>
-                            <el-dropdown-item command="/index/privacy-setting">
-                                <el-icon>
-                                    <Message/>
-                                </el-icon>
-                                安全设置
-                            </el-dropdown-item>
-                            <el-dropdown-item @click="userLogout" divided>
-                                <el-icon>
-                                    <Back/>
-                                </el-icon>
-                                退出登录
-                            </el-dropdown-item>
-                          </el-dropdown-menu>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item command="/index/user-setting">
+                                    <el-icon>
+                                        <Operation/>
+                                    </el-icon>
+                                    个人设置
+                                </el-dropdown-item>
+                                <el-dropdown-item command="/index/privacy-setting">
+                                    <el-icon>
+                                        <Message/>
+                                    </el-icon>
+                                    安全设置
+                                </el-dropdown-item>
+                                <el-dropdown-item @click="userLogout" divided>
+                                    <el-icon>
+                                        <Back/>
+                                    </el-icon>
+                                    退出登录
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
                         </template>
                     </el-dropdown>
                 </div>
@@ -181,7 +243,6 @@ const toggleDarkMode = useToggle(isDark);
                                         表白墙
                                     </template>
                                 </el-menu-item>
-
                             </el-sub-menu>
                             <el-sub-menu index="2">
                                 <template #title>
@@ -193,7 +254,7 @@ const toggleDarkMode = useToggle(isDark);
                                 <el-menu-item>
                                     <template #title>
                                         <el-icon>
-                                            <Document/>
+                                            <Monitor/>
                                         </el-icon>
                                         教务系统
                                     </template>
@@ -206,7 +267,6 @@ const toggleDarkMode = useToggle(isDark);
                                         在线图书馆
                                     </template>
                                 </el-menu-item>
-
                             </el-sub-menu>
                             <el-sub-menu index="3">
                                 <template #title>
