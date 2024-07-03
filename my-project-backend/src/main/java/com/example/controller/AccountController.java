@@ -81,6 +81,4 @@ public class AccountController {
     public RestBean<AccountPrivacyVO> privacy(@RequestAttribute(Const.ATTR_USER_ID) int id){
         return RestBean.success(privacyService.accountPrivacy(id).asViewObject(AccountPrivacyVO.class));
     }
-
-
 }

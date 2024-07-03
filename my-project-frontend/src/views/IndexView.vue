@@ -115,7 +115,12 @@ function handleCommand(command) {
     router.push(command);
 }
 const isDark = useDark()
-const toggleDarkMode = useToggle(isDark)
+// const toggleDarkMode = useToggle(isDark)
+const toggleDarkMode = () => {
+  isDark.value = !isDark.value;  // 切换当前模式
+  emit('toggle-dark-mode', isDark.value);  // 向父组件发送事件
+}
+
 </script>
 
 <template>
