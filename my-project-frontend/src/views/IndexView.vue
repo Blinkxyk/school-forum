@@ -255,18 +255,24 @@ onMounted(() => {
                                 </template>
                                 <el-menu-item>
                                     <template #title>
+                                        <a href="https://my.cqu.edu.cn/" target="_blank"
+                                           style="text-decoration: none; color: inherit;">
                                         <el-icon>
                                             <Monitor/>
                                         </el-icon>
                                         教务系统
+                                        </a>
                                     </template>
                                 </el-menu-item>
                                 <el-menu-item>
                                     <template #title>
+                                        <a href="http://v2.lib.cqu.edu.cn/" target="_blank"
+                                           style="text-decoration: none; color: inherit;">
                                         <el-icon>
                                             <Collection/>
                                         </el-icon>
                                         在线图书馆
+                                        </a>
                                     </template>
                                 </el-menu-item>
                             </el-sub-menu>
