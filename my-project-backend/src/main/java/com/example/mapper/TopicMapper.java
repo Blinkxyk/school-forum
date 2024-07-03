@@ -51,6 +51,7 @@ public interface TopicMapper extends BaseMapper<Topic> {
     List<Topic> collectTopics(int uid);
 
     @Select("""
+
             select t.*, u.username, u.avatar,
                    (select count(*) from db_topic_interact_like where tid = t.id) as like_count,
                    (select count(*) from db_topic_interact_collect where tid = t.id) as collect_count
@@ -62,5 +63,6 @@ public interface TopicMapper extends BaseMapper<Topic> {
 
     @Delete("DELETE FROM db_topic WHERE id = #{id}")
     void deleteTopic( @Param("id") int id);
+
 
 }

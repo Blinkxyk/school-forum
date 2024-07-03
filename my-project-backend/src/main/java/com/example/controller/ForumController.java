@@ -2,7 +2,9 @@ package com.example.controller;
 
 import com.example.entity.RestBean;
 import com.example.entity.dto.Interact;
+
 import com.example.entity.dto.TopicWithUserInfo;
+
 import com.example.entity.vo.request.AddCommentVO;
 import com.example.entity.vo.request.TopicCreateVO;
 import com.example.entity.vo.request.TopicUpdateVO;
@@ -116,7 +118,9 @@ public class ForumController {
     // 新添加的通过标题搜索Topic的方法
     @GetMapping("/search-topic")
     public RestBean<List<TopicPreviewVO>> searchTopicsByTitle(@RequestParam String title) {
+
         List<TopicWithUserInfo> topics = topicService.searchTopicsByTitle(title);
+
         if (topics.isEmpty()) {
             return RestBean.success(Collections.emptyList());
         }
@@ -126,6 +130,7 @@ public class ForumController {
                 .collect(Collectors.toList());
         return RestBean.success(previewVOs);
     }
+
 
     private TopicPreviewVO convertToTopicPreviewVO(TopicWithUserInfo topic) {
         TopicPreviewVO vo = new TopicPreviewVO();
@@ -143,6 +148,7 @@ public class ForumController {
         topicService.deleteTopic(id);
         return RestBean.success();
     }
+
 
 
 }

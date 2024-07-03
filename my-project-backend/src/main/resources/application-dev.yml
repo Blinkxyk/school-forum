@@ -40,8 +40,8 @@ spring:
       credentials: false
       methods: '*'
   minio:
-    endpoint: 'http://localhost:9000'
-    username: 'admin'
-    password: '12345678'
+    endpoint: 'http://localhost:9005'
+    username: 'blink'
+    password: 'blink962464'
   weather:
-    key: 7abbc24d3b4443b597a3b3c676e0f221
+    key: feaf0ecde87b497aa1c1a81d91572ac5

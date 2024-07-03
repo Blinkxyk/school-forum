@@ -2,7 +2,9 @@
 import {get, logout} from '@/net'
 import router from "@/router";
 import {useStore} from "@/store";
+
 import {onMounted, reactive, ref} from "vue";
+
 import {
     Back,
     Bell,
@@ -15,6 +17,7 @@ import {
 } from "@element-plus/icons-vue";
 import LightCard from "@/components/LightCard.vue";
 import {ElMessage} from "element-plus";
+
 
 const store = useStore()
 const loading = ref(true)
@@ -76,7 +79,9 @@ const searchTopics = () => {
         ElMessage.warning('请输入搜索关键词');
         return;
     }
+
     isSearching = true;
+
     const url = `/api/forum/search-topic?title=${encodeURIComponent(searchInput.text)}`;
     get(url, (data) => {
         if (data && data.length > 0) {
@@ -87,10 +92,12 @@ const searchTopics = () => {
         } else {
             topics.list = [];
 
+
             ElMessage.info('未找到相关帖子');
         }
     });
     isSearching = false;
+
 }
 
 /*watch(() => store.searchResults, () => {
@@ -102,16 +109,19 @@ const loadSearchResults = () => {
     topics.end = false;
     topics.list = store.searchResults;
 }
+
 function handleCommand(command) {
     router.push(command);
 }
 onMounted(() => {
     if (isSearching===true&&store.searchResults.length === 0) {
+
         ElMessage.info('未找到相关帖子');
     } else {
         loadSearchResults();
     }
 });
+
 </script>
 
 <template>
@@ -138,6 +148,9 @@ onMounted(() => {
 
                 </div>
                 <div class="user-info">
+                    <el-button @click="toggleDarkMode">
+                        切换到 {{ isDark ? '浅色' : '深色' }} 模式
+                    </el-button>
                     <el-popover placement="bottom" :width="350" trigger="click">
                         <template #reference>
                             <el-badge style="margin-right: 15px" is-dot :hidden="!notification.length">
@@ -236,6 +249,7 @@ onMounted(() => {
                                         表白墙
                                     </template>
                                 </el-menu-item>
+
 <!--                                <el-menu-item>
                                     <template #title>
                                         <el-icon>
@@ -245,6 +259,7 @@ onMounted(() => {
                                         <el-tag style="margin-left: 10px" size="small">合作机构</el-tag>
                                     </template>
                                 </el-menu-item>-->
+
                             </el-sub-menu>
                             <el-sub-menu index="2">
                                 <template #title>
@@ -255,13 +270,17 @@ onMounted(() => {
                                 </template>
                                 <el-menu-item>
                                     <template #title>
+
                                         <a href="https://my.cqu.edu.cn/" target="_blank"
                                            style="text-decoration: none; color: inherit;">
+
                                         <el-icon>
                                             <Monitor/>
                                         </el-icon>
                                         教务系统
+
                                         </a>
+
                                     </template>
                                 </el-menu-item>
                                 <el-menu-item>
@@ -272,7 +291,9 @@ onMounted(() => {
                                             <Collection/>
                                         </el-icon>
                                         在线图书馆
+
                                         </a>
+
                                     </template>
                                 </el-menu-item>
                             </el-sub-menu>
