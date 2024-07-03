@@ -180,19 +180,6 @@ public class TopicServiceImpl extends ServiceImpl<TopicMapper, Topic> implements
         commentMapper.delete(Wrappers.<TopicComment>query().eq("id", id).eq("uid", uid));
     }
 
-    @Override
-    public List<Topic> searchTopicsByTitle(String title) {
-        // 从数据库通过标题搜索Topic
-        List<Topic> topics = baseMapper.searchTopicsByTitle(title);
-
-        // 如果搜索结果为空，直接返回空列表
-        if (topics == null || topics.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-
-        return topics;
-    }
 
 
     //从数据库中获取指定用户收藏的话题
@@ -346,4 +333,11 @@ public class TopicServiceImpl extends ServiceImpl<TopicMapper, Topic> implements
         }
         return true;
     }
+
+    public List<TopicWithUserInfo> searchTopicsByTitle(String title) {
+        return baseMapper.searchTopicsByTitle(title);
+    }
+    @Override
+    public void deleteTopic(int id) {
+        baseMapper.deleteTopic(id);}
 }

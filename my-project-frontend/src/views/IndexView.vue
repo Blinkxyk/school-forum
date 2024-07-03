@@ -2,12 +2,13 @@
 import {get, logout} from '@/net'
 import router from "@/router";
 import {useStore} from "@/store";
-import {onMounted, reactive, ref, watch} from "vue";
+
+import {onMounted, reactive, ref} from "vue";
+
 import {
     Back,
     Bell,
-    ChatDotSquare, Check, Collection, DataLine,
-    Document, Files,
+    ChatDotSquare, Check, Collection,
     Location, Lock, Message, Monitor,
     Notification, Operation,
     Position,
@@ -16,7 +17,7 @@ import {
 } from "@element-plus/icons-vue";
 import LightCard from "@/components/LightCard.vue";
 import {ElMessage} from "element-plus";
-import {useDark, useToggle} from "@vueuse/core/index";
+
 
 const store = useStore()
 const loading = ref(true)
@@ -78,7 +79,9 @@ const searchTopics = () => {
         ElMessage.warning('请输入搜索关键词');
         return;
     }
-    isSearching=true;
+
+    isSearching = true;
+
     const url = `/api/forum/search-topic?title=${encodeURIComponent(searchInput.text)}`;
     get(url, (data) => {
         if (data && data.length > 0) {
@@ -88,10 +91,13 @@ const searchTopics = () => {
             router.push('/index/search-results/'+searchInput.text);
         } else {
             topics.list = [];
+
+
             ElMessage.info('未找到相关帖子');
         }
     });
-    isSearching=false;
+    isSearching = false;
+
 }
 
 /*watch(() => store.searchResults, () => {
@@ -104,22 +110,17 @@ const loadSearchResults = () => {
     topics.list = store.searchResults;
 }
 
+function handleCommand(command) {
+    router.push(command);
+}
 onMounted(() => {
-    if (store.searchResults.length === 0&&isSearching.value) {
+    if (isSearching===true&&store.searchResults.length === 0) {
+
         ElMessage.info('未找到相关帖子');
     } else {
         loadSearchResults();
     }
 });
-function handleCommand(command) {
-    router.push(command);
-}
-const isDark = useDark()
-// const toggleDarkMode = useToggle(isDark)
-const toggleDarkMode = () => {
-  isDark.value = !isDark.value;  // 切换当前模式
-  emit('toggle-dark-mode', isDark.value);  // 向父组件发送事件
-}
 
 </script>
 
@@ -248,6 +249,17 @@ const toggleDarkMode = () => {
                                         表白墙
                                     </template>
                                 </el-menu-item>
+
+<!--                                <el-menu-item>
+                                    <template #title>
+                                        <el-icon>
+                                            <School/>
+                                        </el-icon>
+                                        海文考研
+                                        <el-tag style="margin-left: 10px" size="small">合作机构</el-tag>
+                                    </template>
+                                </el-menu-item>-->
+
                             </el-sub-menu>
                             <el-sub-menu index="2">
                                 <template #title>
@@ -258,18 +270,30 @@ const toggleDarkMode = () => {
                                 </template>
                                 <el-menu-item>
                                     <template #title>
+
+                                        <a href="https://my.cqu.edu.cn/" target="_blank"
+                                           style="text-decoration: none; color: inherit;">
+
                                         <el-icon>
                                             <Monitor/>
                                         </el-icon>
                                         教务系统
+
+                                        </a>
+
                                     </template>
                                 </el-menu-item>
                                 <el-menu-item>
                                     <template #title>
+                                        <a href="http://v2.lib.cqu.edu.cn/" target="_blank"
+                                           style="text-decoration: none; color: inherit;">
                                         <el-icon>
                                             <Collection/>
                                         </el-icon>
                                         在线图书馆
+
+                                        </a>
+
                                     </template>
                                 </el-menu-item>
                             </el-sub-menu>
