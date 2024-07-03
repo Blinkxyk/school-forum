@@ -18,6 +18,7 @@ const route = useRoute()
 const store = useStore()
 
 const tid = route.params.tid
+const id = route.params.id
 
 const topic = reactive({
     data: null,
@@ -67,6 +68,12 @@ function updateTopic(editor) {
         ElMessage.success('帖子内容更新成功！')
         edit.value = false
         init()
+    })
+}
+function deleteTopic(id) {
+    get(`/api/forum/delete-topic?&id=${id}`, () => {
+        ElMessage.success('帖子删除成功！')
+        router.push({ path: '/index', query: { refresh: true } })
     })
 }
 
@@ -136,6 +143,11 @@ function deleteComment(id) {
                                      @check="edit = true" style="margin-right: 20px"
                                      v-if="store.user.id === topic.data.user.id">
                         <el-icon><EditPen/></el-icon>
+                    </interact-button>
+                    <interact-button name="删除帖子" color="dodgerblue"
+                                     @click="deleteTopic(topic.data.id)" style="margin-right: 20px"
+                                     v-if="store.user.id === topic.data.user.id">
+                        <el-icon><Delete/></el-icon>
                     </interact-button>
                     <interact-button name="点个赞吧" check-name="已点赞" color="pink" :check="topic.like"
                                      @check="interact('like', '点赞')">

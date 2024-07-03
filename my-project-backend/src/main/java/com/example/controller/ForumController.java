@@ -2,7 +2,6 @@ package com.example.controller;
 
 import com.example.entity.RestBean;
 import com.example.entity.dto.Interact;
-import com.example.entity.dto.Topic;
 import com.example.entity.dto.TopicWithUserInfo;
 import com.example.entity.vo.request.AddCommentVO;
 import com.example.entity.vo.request.TopicCreateVO;
@@ -137,5 +136,13 @@ public class ForumController {
         vo.setCollect(topic.getCollectCount());
         return vo;
     }
+
+    //删除帖子
+    @GetMapping("/delete-topic")
+    public RestBean<Void> deleteTopic(@RequestParam int id) {
+        topicService.deleteTopic(id);
+        return RestBean.success();
+    }
+
 
 }

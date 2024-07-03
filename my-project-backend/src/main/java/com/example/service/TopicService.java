@@ -30,4 +30,6 @@ public interface TopicService extends IService<Topic> {
     void deleteComment(int id, int uid);
 
     List<TopicWithUserInfo> searchTopicsByTitle(String title);
+
+    void deleteTopic(int id);
 }

@@ -60,4 +60,7 @@ public interface TopicMapper extends BaseMapper<Topic> {
             """)
     List<TopicWithUserInfo> searchTopicsByTitle(@Param("title") String title);
 
+    @Delete("DELETE FROM db_topic WHERE id = #{id}")
+    void deleteTopic( @Param("id") int id);
+
 }

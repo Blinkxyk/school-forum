@@ -336,4 +336,7 @@ public class TopicServiceImpl extends ServiceImpl<TopicMapper, Topic> implements
     public List<TopicWithUserInfo> searchTopicsByTitle(String title) {
         return baseMapper.searchTopicsByTitle(title);
     }
+    @Override
+    public void deleteTopic(int id) {
+        baseMapper.deleteTopic(id);}
 }
