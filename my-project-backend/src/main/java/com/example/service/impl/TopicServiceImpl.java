@@ -180,7 +180,16 @@ public class TopicServiceImpl extends ServiceImpl<TopicMapper, Topic> implements
         commentMapper.delete(Wrappers.<TopicComment>query().eq("id", id).eq("uid", uid));
     }
 
+    @Override
+    public List<Topic> searchMyTopic(int uid) {
+        List<Topic> topics = baseMapper.searchMyTopic(uid);
 
+        if (topics == null || topics.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return topics;
+    }
 
     //从数据库中获取指定用户收藏的话题
     @Override

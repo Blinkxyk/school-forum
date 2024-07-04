@@ -3,6 +3,7 @@ package com.example.controller;
 import com.example.entity.RestBean;
 import com.example.entity.dto.Interact;
 
+import com.example.entity.dto.Topic;
 import com.example.entity.dto.TopicWithUserInfo;
 
 import com.example.entity.vo.request.AddCommentVO;
@@ -131,6 +132,26 @@ public class ForumController {
         return RestBean.success(previewVOs);
     }
 
+    @GetMapping("/my-topic")
+    public RestBean<List<TopicPreviewVO>> searchMyTopic(@RequestParam int uid) {
+        List<Topic> topics = topicService.searchMyTopic(uid);
+        if (topics.isEmpty()) {
+            return RestBean.success(Collections.emptyList());
+        }
+
+        List<TopicPreviewVO> previewVOs = topics.stream()
+                .map(this::convertToTopicPreviewVO)
+                .collect(Collectors.toList());
+        return RestBean.success(previewVOs);
+    }
+
+    private TopicPreviewVO convertToTopicPreviewVO(Topic topic) {
+        TopicPreviewVO vo = new TopicPreviewVO();
+        BeanUtils.copyProperties(topic, vo);
+        // 如果TopicPreviewVO需要额外的数据处理，可以在这里添加
+        // 例如，vo.setSomeField(computeSomeValue(topic));
+        return vo;
+    }
 
     private TopicPreviewVO convertToTopicPreviewVO(TopicWithUserInfo topic) {
         TopicPreviewVO vo = new TopicPreviewVO();

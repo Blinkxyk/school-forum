@@ -64,5 +64,11 @@ public interface TopicMapper extends BaseMapper<Topic> {
     @Delete("DELETE FROM db_topic WHERE id = #{id}")
     void deleteTopic( @Param("id") int id);
 
+    @Select("""
+            select * from db_topic
+            where uid = #{uid}
+            """)
+    List<Topic> searchMyTopic(int uid);
+
 
 }
