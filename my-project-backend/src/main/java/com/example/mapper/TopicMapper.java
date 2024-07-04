@@ -3,7 +3,6 @@ package com.example.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.entity.dto.Interact;
 import com.example.entity.dto.Topic;
-import com.example.entity.dto.TopicWithUserInfo;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -51,18 +50,15 @@ public interface TopicMapper extends BaseMapper<Topic> {
     List<Topic> collectTopics(int uid);
 
     @Select("""
-
-            select t.*, u.username, u.avatar,
-                   (select count(*) from db_topic_interact_like where tid = t.id) as like_count,
-                   (select count(*) from db_topic_interact_collect where tid = t.id) as collect_count
-            from db_topic t
-            left join db_account u on t.uid = u.id
-            where t.title like CONCAT('%',#{title},'%')
+            select * from db_topic
+            where title like CONCAT('%',#{title},'%')
             """)
-    List<TopicWithUserInfo> searchTopicsByTitle(@Param("title") String title);
-
-    @Delete("DELETE FROM db_topic WHERE id = #{id}")
-    void deleteTopic( @Param("id") int id);
+    List<Topic> searchTopicsByTitle(@Param("title") String title);//搜索功能
 
 
+    @Select("""
+            select * from db_topic
+            where uid = #{uid}
+            """)
+    List<Topic> searchMyTopic(int uid);
 }
