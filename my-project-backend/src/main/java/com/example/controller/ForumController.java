@@ -134,7 +134,7 @@ public class ForumController {
 
     @GetMapping("/my-topic")
     public RestBean<List<TopicPreviewVO>> searchMyTopic(@RequestParam int uid) {
-        List<Topic> topics = topicService.searchMyTopic(uid);
+        List<TopicWithUserInfo> topics = topicService.searchMyTopic(uid);
         if (topics.isEmpty()) {
             return RestBean.success(Collections.emptyList());
         }

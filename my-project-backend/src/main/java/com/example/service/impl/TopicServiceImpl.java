@@ -181,8 +181,8 @@ public class TopicServiceImpl extends ServiceImpl<TopicMapper, Topic> implements
     }
 
     @Override
-    public List<Topic> searchMyTopic(int uid) {
-        List<Topic> topics = baseMapper.searchMyTopic(uid);
+    public List<TopicWithUserInfo> searchMyTopic(int uid) {
+        List<TopicWithUserInfo> topics = baseMapper.searchMyTopic(uid);
 
         if (topics == null || topics.isEmpty()) {
             return Collections.emptyList();

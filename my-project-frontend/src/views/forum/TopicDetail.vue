@@ -144,7 +144,7 @@ function deleteComment(id) {
                                      v-if="store.user.id === topic.data.user.id">
                         <el-icon><EditPen/></el-icon>
                     </interact-button>
-                    <interact-button name="删除帖子" color="dodgerblue"
+                    <interact-button name="删除帖子" color="red"
                                      @click="deleteTopic(topic.data.id)" style="margin-right: 20px"
                                      v-if="store.user.id === topic.data.user.id">
                         <el-icon><Delete/></el-icon>

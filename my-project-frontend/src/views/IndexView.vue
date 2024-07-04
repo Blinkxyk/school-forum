@@ -8,11 +8,11 @@ import {onMounted, reactive, ref, watch} from "vue";
 import {
     Back,
     Bell,
-    ChatDotSquare, Check, Collection,
+    ChatDotSquare, Check, Collection, Files,
     Location, Lock, Message, Monitor,
-    Notification, Operation,
+    Operation,
     Position,
-    School, Search,
+    Search,
     Umbrella, User
 } from "@element-plus/icons-vue";
 import LightCard from "@/components/LightCard.vue";
@@ -100,10 +100,6 @@ const searchTopics = () => {
 
 }
 
-/*watch(() => store.searchResults, () => {
-    loadSearchResults();
-}, { immediate: true });*/
-
 const loadSearchResults = () => {
     topics.page = 0;
     topics.end = false;
@@ -155,11 +151,11 @@ onMounted(() => {
                 </div>
                 <div class="user-info">
                     <el-button @click="toggleDarkMode">
-                        切换到 {{ isDark ? '浅色' : '深色' }} 模式
+                        {{ isDark ? '浅色' : '深色' }}模式
                     </el-button>
                     <el-popover placement="bottom" :width="350" trigger="click">
                         <template #reference>
-                            <el-badge style="margin-right: 15px" is-dot :hidden="!notification.length">
+                            <el-badge style="margin-right: 15px; margin-left: 15px" is-dot :hidden="!notification.length">
                                 <div class="notification">
                                     <el-icon><Bell/></el-icon>
                                     <div style="font-size: 10px">消息</div>
@@ -239,6 +235,14 @@ onMounted(() => {
                                         帖子广场
                                     </template>
                                 </el-menu-item>
+<!--                                <el-menu-item index="/index">
+                                    <template #title>
+                                        <el-icon>
+                                            <ChatDotSquare/>
+                                        </el-icon>
+                                        我的帖子
+                                    </template>
+                                </el-menu-item>-->
                                 <el-menu-item>
                                     <template #title>
                                         <el-icon>
