@@ -255,6 +255,14 @@ onMounted(() => {
                                         表白墙
                                     </template>
                                 </el-menu-item>
+                              <el-menu-item index="/index/my-topic"> <!-- 新增菜单项 -->
+                                <template #title>
+                                  <el-icon>
+                                    <Files/>
+                                  </el-icon>
+                                  我的帖子
+                                </template>
+                              </el-menu-item>
 
 <!--                                <el-menu-item>
                                     <template #title>

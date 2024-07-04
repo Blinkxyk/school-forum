@@ -42,6 +42,11 @@ const router = createRouter({
                             path: 'topic-detail/:tid',
                             name: 'topic-detail',
                             component: () => import('@/views/forum/TopicDetail.vue')
+                        },
+                        {
+                            path: 'my-topic',
+                            name: 'my-topic',
+                            component: () => import('@/views/forum/MyTopic.vue')
                         }
                     ]
                 },
