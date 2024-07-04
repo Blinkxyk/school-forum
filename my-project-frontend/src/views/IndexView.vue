@@ -3,7 +3,7 @@ import {get, logout} from '@/net'
 import router from "@/router";
 import {useStore} from "@/store";
 
-import {onMounted, reactive, ref} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 
 import {
     Back,
@@ -17,7 +17,7 @@ import {
 } from "@element-plus/icons-vue";
 import LightCard from "@/components/LightCard.vue";
 import {ElMessage} from "element-plus";
-
+import {useDark, useToggle} from "@vueuse/core/index";
 
 const store = useStore()
 const loading = ref(true)
@@ -112,6 +112,12 @@ const loadSearchResults = () => {
 
 function handleCommand(command) {
     router.push(command);
+}
+const isDark = useDark()
+// const toggleDarkMode = useToggle(isDark)
+const toggleDarkMode = () => {
+  isDark.value = !isDark.value;  // 切换当前模式
+  emit('toggle-dark-mode', isDark.value);  // 向父组件发送事件
 }
 onMounted(() => {
     if (isSearching===true&&store.searchResults.length === 0) {
