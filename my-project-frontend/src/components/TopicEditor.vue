@@ -88,6 +88,10 @@ function submitTopic() {
         ElMessage.warning('字数超出限制，无法发布主题！')
         return
     }
+    if(text.length === 0) {
+      ElMessage.warning('请输入帖子内容！')
+      return
+    }
     if(!editor.title) {
         ElMessage.warning('请填写标题！')
         return
