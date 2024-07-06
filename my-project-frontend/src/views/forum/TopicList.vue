@@ -178,8 +178,8 @@ navigator.geolocation.getCurrentPosition(position => {
                     </div>
                     <el-divider style="margin: 10px 0"/>
                     <div style="font-size: 14px;margin: 10px;color: grey">
-                        为认真学习宣传贯彻党的二十大精神,深入贯彻习近平强军思想,
-                        作为迎接办学70周年系列学术活动之一,国防科技大学将于2022年11月24日至26日在长沙举办“国防科技
+                        夏令营活动将于2024年7月9日—7月10日在重庆大学大数据与软件学院举行，
+                        主要活动包括学科方向介绍、专家报告、参观交流等内容。营员须按要求全程参加活动，重庆大学大数据与软件学院将为营员免费提供夏令营期间的食宿。
                     </div>
                 </light-card>
                 <light-card style="margin-top: 10px">

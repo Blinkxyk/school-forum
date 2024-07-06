@@ -18,6 +18,7 @@ public class TopicPreviewVO {
     String avatar;
     int like;
     int collect;
+    int top;
 
     public int getId() {
         return id;
@@ -105,5 +106,13 @@ public class TopicPreviewVO {
 
     public void setCollect(int collect) {
         this.collect = collect;
+    }
+
+    public int getTop() {
+        return top;
+    }
+
+    public void setTop(int top) {
+        this.top = top;
     }
 }

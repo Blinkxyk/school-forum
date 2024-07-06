@@ -3,7 +3,18 @@ import {useRoute} from "vue-router";
 import {get, post} from "@/net";
 import axios from "axios";
 import {computed, reactive, ref} from "vue";
-import {ArrowLeft, ChatSquare, CircleCheck, Delete, EditPen, Female, Male, Plus, Star} from "@element-plus/icons-vue";
+import {
+    ArrowLeft,
+    ChatSquare,
+    CircleCheck,
+    Delete,
+    EditPen,
+    Female,
+    Male,
+    Plus,
+    Star,
+    Top
+} from "@element-plus/icons-vue";
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html';
 import Card from "@/components/Card.vue";
 import router from "@/router";
@@ -25,7 +36,8 @@ const topic = reactive({
     like: false,
     collect: false,
     comments: null,
-    page: 1
+    page: 1,
+    top:0,
 })
 const edit = ref(false)
 const comment = reactive({
@@ -38,6 +50,7 @@ const init = () => get(`api/forum/topic?tid=${tid}`, data => {
     topic.data = data
     topic.like = data.interact.like
     topic.collect = data.interact.collect
+    topic.top = data.top
     loadComments(1)
 })
 init()
@@ -94,6 +107,19 @@ function deleteComment(id) {
         loadComments(topic.page)
     })
 }
+
+function setTop(id) {
+    const apiUrl = `/api/forum/set-top?id=${id}`;
+    get(apiUrl, () => {
+        // 根据操作前的状态决定提示信息
+        const message = this.topic.top === 1 ? '取消置顶成功！' : '置顶成功！';
+        ElMessage.success(message);
+        init(); // 重新加载数据，确保视图更新
+        this.topic.top = this.topic.top === 1 ? 0 : 1; // 更新本地状态
+    })
+}
+
+
 </script>
 
 <template>
@@ -139,6 +165,14 @@ function deleteComment(id) {
                     <div>发帖时间: {{new Date(topic.data.time).toLocaleString()}}</div>
                 </div>
                 <div style="text-align: right;margin-top: 30px">
+
+                    <interact-button :name="topic.top === 1 ? '取消置顶' : '置顶帖子'"
+                                     color="red"
+                                     @click="setTop(topic.data.id)"
+                                     style="margin-right: 20px"
+                                     v-if="store.user.role === 'admin'">
+                        <el-icon><Top /></el-icon>
+                    </interact-button>
                     <interact-button name="编辑帖子" color="dodgerblue" :check="false"
                                      @check="edit = true" style="margin-right: 20px"
                                      v-if="store.user.id === topic.data.user.id">
@@ -146,7 +180,7 @@ function deleteComment(id) {
                     </interact-button>
                     <interact-button name="删除帖子" color="red"
                                      @click="deleteTopic(topic.data.id)" style="margin-right: 20px"
-                                     v-if="store.user.id === topic.data.user.id">
+                                     v-if="store.user.id === topic.data.user.id||store.user.role==='admin'">
                         <el-icon><Delete/></el-icon>
                     </interact-button>
                     <interact-button name="点个赞吧" check-name="已点赞" color="pink" :check="topic.like"

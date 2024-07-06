@@ -36,4 +36,5 @@ public interface TopicService extends IService<Topic> {
 
     List<TopicWithUserInfo> searchMyTopic(int uid);
 
+    void setTop(int id);
 }

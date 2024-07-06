@@ -19,6 +19,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -134,7 +136,7 @@ public class ForumController {
 
     @GetMapping("/my-topic")
     public RestBean<List<TopicPreviewVO>> searchMyTopic(@RequestParam int uid) {
-        List<TopicWithUserInfo> topics = topicService.searchMyTopic(uid);
+        List<TopicWithUserInfo > topics = topicService.searchMyTopic(uid);
         if (topics.isEmpty()) {
             return RestBean.success(Collections.emptyList());
         }
@@ -170,6 +172,11 @@ public class ForumController {
         return RestBean.success();
     }
 
+    @GetMapping("/set-top")
+    public RestBean<Void> setTop(@RequestParam int id) {
+            topicService.setTop(id);
+        return RestBean.success();
+    }
 
 
 }
