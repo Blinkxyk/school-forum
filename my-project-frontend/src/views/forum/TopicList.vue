@@ -13,7 +13,7 @@ import {
     Microphone, CircleCheck, Star, FolderOpened, ArrowRightBold
 } from "@element-plus/icons-vue";
 import Weather from "@/components/Weather.vue";
-import {computed, reactive, ref, watch} from "vue";
+import {computed, onMounted, reactive, ref, watch} from "vue";
 import {get} from "@/net";
 import {ElMessage} from "element-plus";
 import TopicEditor from "@/components/TopicEditor.vue";
@@ -90,6 +90,20 @@ navigator.geolocation.getCurrentPosition(position => {
     timeout: 3000,
     enableHighAccuracy: true
 })
+const notification = ref('加载中...'); // 初始化通知为加载中状态
+
+// 当组件挂载后立即获取论坛公告
+onMounted(async () => {
+    get(`/api/forum/get-forum-notification`,
+        (data) => {
+            notification.value = data;
+        },
+        (message, status) => {
+            console.warn(`Failed to fetch notification: ${message} (Status: ${status})`);
+            notification.value = 'Failed to load notification. Please try again later.';
+        }
+    );
+});
 </script>
 
 <template>
@@ -178,8 +192,7 @@ navigator.geolocation.getCurrentPosition(position => {
                     </div>
                     <el-divider style="margin: 10px 0"/>
                     <div style="font-size: 14px;margin: 10px;color: grey">
-                        夏令营活动将于2024年7月9日—7月10日在重庆大学大数据与软件学院举行，
-                        主要活动包括学科方向介绍、专家报告、参观交流等内容。营员须按要求全程参加活动，重庆大学大数据与软件学院将为营员免费提供夏令营期间的食宿。
+                        {{notification}}
                     </div>
                 </light-card>
                 <light-card style="margin-top: 10px">

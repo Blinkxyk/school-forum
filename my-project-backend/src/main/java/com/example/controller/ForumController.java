@@ -10,6 +10,7 @@ import com.example.entity.vo.request.AddCommentVO;
 import com.example.entity.vo.request.TopicCreateVO;
 import com.example.entity.vo.request.TopicUpdateVO;
 import com.example.entity.vo.response.*;
+import com.example.service.NotificationService;
 import com.example.service.TopicService;
 import com.example.service.WeatherService;
 import com.example.utils.Const;
@@ -37,6 +38,9 @@ public class ForumController {
 
     @Resource
     TopicService topicService;
+
+    @Resource
+    NotificationService notificationService;
 
     @Resource
     ControllerUtils utils;
@@ -178,5 +182,10 @@ public class ForumController {
         return RestBean.success();
     }
 
+    @GetMapping("/get-forum-notification")
+    public RestBean<String> getNotification() {
+        String notification = notificationService.getForumNotification();
+        return RestBean.success(notification);
+    }
 
 }

@@ -11,4 +11,6 @@ public interface NotificationService extends IService<Notification> {
     void deleteUserNotification(int id, int uid);
     void deleteUserAllNotification(int uid);
     void addNotification(int uid, String title, String content, String type, String url);
+
+    String getForumNotification();
 }

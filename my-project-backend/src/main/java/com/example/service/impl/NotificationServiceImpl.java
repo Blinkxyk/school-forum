@@ -38,4 +38,9 @@ public class NotificationServiceImpl extends ServiceImpl<NotificationMapper, Not
         notification.setUrl(url);
         this.save(notification);
     }
+
+    @Override
+    public String getForumNotification() {
+        return baseMapper.getForumNotification();
+    }
 }
