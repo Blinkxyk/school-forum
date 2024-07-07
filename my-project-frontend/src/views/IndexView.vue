@@ -141,9 +141,9 @@ onMounted(() => {
                     <template #append>
                         <el-select style="width: 120px" v-model="searchInput.type">
                             <el-option value="1" label="帖子广场"/>
-                            <el-option value="2" label="校园活动"/>
+<!--                            <el-option value="2" label="校园活动"/>
                             <el-option value="3" label="表白墙"/>
-                            <el-option value="4" label="教务通知"/>
+                            <el-option value="4" label="教务通知"/>-->
                         </el-select>
                     </template>
                     </el-input>
@@ -243,7 +243,7 @@ onMounted(() => {
                                         我的帖子
                                     </template>
                                 </el-menu-item>-->
-                                <el-menu-item>
+<!--                                <el-menu-item>
                                     <template #title>
                                         <el-icon>
                                             <Bell/>
@@ -258,7 +258,7 @@ onMounted(() => {
                                         </el-icon>
                                         表白墙
                                     </template>
-                                </el-menu-item>
+                                </el-menu-item>-->
                               <el-menu-item index="/index/my-topic"> <!-- 新增菜单项 -->
                                 <template #title>
                                   <el-icon>

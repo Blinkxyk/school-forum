@@ -60,6 +60,13 @@ function updateList(){
     })
 }
 
+function updateForumNotification(content){
+    get(`/api/forum/update-forum-notification?content=${content}`, () =>{
+        ElMessage.success('置顶信息更新成功！')
+    })
+
+}
+
 function onTopicCreate() {
     editor.value = false
     resetList()
@@ -185,7 +192,8 @@ onMounted(async () => {
                         <el-icon style="transform: translateY(3px)"><ArrowRightBold/></el-icon>
                     </div>
                 </light-card>
-                <light-card style="margin-top: 10px">
+                <light-card style="margin-top: 10px"
+                            v-if="store.user.role === 'user'">
                     <div style="font-weight: bold">
                         <el-icon><CollectionTag/></el-icon>
                         论坛公告
@@ -195,6 +203,26 @@ onMounted(async () => {
                         {{notification}}
                     </div>
                 </light-card>
+                    <light-card style="margin-top: 10px"
+                                v-if="store.user.role === 'admin'">
+                        <div style="font-weight: bold">
+                            <el-icon><CollectionTag/></el-icon>
+                            论坛公告
+                        </div>
+                        <el-divider style="margin: 10px 0"/>
+                        <!-- 可编辑的文本区域 -->
+                        <el-input
+                            type="textarea"
+                            :rows="9"
+                            placeholder="输入公告内容"
+                            v-model="notification"
+                            style="margin: 10px; color: grey; font-size: 14px;">
+                        </el-input>
+                        <!-- 保存按钮 -->
+                        <el-button type="primary" @click="updateForumNotification(notification)">更新公告</el-button>
+                    </light-card>
+
+
                 <light-card style="margin-top: 10px">
                     <div style="font-weight: bold">
                         <el-icon><Calendar/></el-icon>

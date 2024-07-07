@@ -85,7 +85,7 @@ function updateTopic(editor) {
 }
 function deleteTopic(id) {
     get(`/api/forum/delete-topic?&id=${id}`, () => {
-        ElMessage.success('帖子删除成功！')
+      ElMessage.success('帖子删除成功！')
         router.push({ path: '/index', query: { refresh: true } })
     })
 }

@@ -43,4 +43,9 @@ public class NotificationServiceImpl extends ServiceImpl<NotificationMapper, Not
     public String getForumNotification() {
         return baseMapper.getForumNotification();
     }
+
+    @Override
+    public void updateForumNotification(String content) {
+        baseMapper.updateForumNotification(content);
+    }
 }

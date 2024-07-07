@@ -188,4 +188,10 @@ public class ForumController {
         return RestBean.success(notification);
     }
 
+    @GetMapping("/update-forum-notification")
+    public RestBean<Void> updateForumNotification(@RequestParam String content) {
+        notificationService.updateForumNotification(content);
+        return RestBean.success();
+    }
+
 }

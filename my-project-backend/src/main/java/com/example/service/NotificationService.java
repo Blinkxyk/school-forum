@@ -13,4 +13,6 @@ public interface NotificationService extends IService<Notification> {
     void addNotification(int uid, String title, String content, String type, String url);
 
     String getForumNotification();
+
+    void  updateForumNotification(String content);
 }
