@@ -5,17 +5,10 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.util.Date;
-//存储帖子具体信息的表
 @Data
-@TableName("db_topic")
-public class Topic {
+@TableName("db_forum_notification")
+public class ForumNotification {
     @TableId(type = IdType.AUTO)
     Integer id;
-    String title;
     String content;
-    Integer type;
-    Date time;
-    Integer uid;
-    Integer top;
 }

@@ -34,6 +34,7 @@ public interface TopicService extends IService<Topic> {
 
     void deleteTopic(int id);
 
-    List<Topic> searchMyTopic(int uid);
+    List<TopicWithUserInfo> searchMyTopic(int uid);
 
+    void setTop(int id);
 }

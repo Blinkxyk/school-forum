@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.entity.dto.Interact;
 import com.example.entity.dto.Topic;
 import com.example.entity.dto.TopicWithUserInfo;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
@@ -51,7 +48,6 @@ public interface TopicMapper extends BaseMapper<Topic> {
     List<Topic> collectTopics(int uid);
 
     @Select("""
-
             select t.*, u.username, u.avatar,
                    (select count(*) from db_topic_interact_like where tid = t.id) as like_count,
                    (select count(*) from db_topic_interact_collect where tid = t.id) as collect_count
@@ -65,10 +61,20 @@ public interface TopicMapper extends BaseMapper<Topic> {
     void deleteTopic( @Param("id") int id);
 
     @Select("""
-            select * from db_topic
-            where uid = #{uid}
+            select t.*, u.username, u.avatar,
+                   (select count(*) from db_topic_interact_like where tid = t.id) as like_count,
+                   (select count(*) from db_topic_interact_collect where tid = t.id) as collect_count
+            from db_topic t
+            left join db_account u on t.uid = u.id
+            where t.uid = #{uid}
             """)
-    List<Topic> searchMyTopic(int uid);
+    List<TopicWithUserInfo> searchMyTopic(int uid);
 
+    @Update("""
+            UPDATE db_topic
+            SET top = CASE WHEN top = 1 THEN 0 ELSE 1 END
+            WHERE id = #{id}
+            """)
+    void setTop(@Param("id") int id);
 
 }

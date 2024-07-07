@@ -181,8 +181,8 @@ public class TopicServiceImpl extends ServiceImpl<TopicMapper, Topic> implements
     }
 
     @Override
-    public List<Topic> searchMyTopic(int uid) {
-        List<Topic> topics = baseMapper.searchMyTopic(uid);
+    public List<TopicWithUserInfo> searchMyTopic(int uid) {
+        List<TopicWithUserInfo> topics = baseMapper.searchMyTopic(uid);
 
         if (topics == null || topics.isEmpty()) {
             return Collections.emptyList();
@@ -247,6 +247,7 @@ public class TopicServiceImpl extends ServiceImpl<TopicMapper, Topic> implements
         TopicDetailVO.User user = new TopicDetailVO.User();
         vo.setUser(this.fillUserDetailsByPrivacy(user, topic.getUid()));
         vo.setComments(commentMapper.selectCount(Wrappers.<TopicComment>query().eq("tid", tid)));
+        vo.setTop(topic.getTop());
         return vo;
     }
 
@@ -348,5 +349,11 @@ public class TopicServiceImpl extends ServiceImpl<TopicMapper, Topic> implements
     }
     @Override
     public void deleteTopic(int id) {
-        baseMapper.deleteTopic(id);}
+        baseMapper.deleteTopic(id);
+    }
+
+    @Override
+    public void setTop(int id){
+        baseMapper.setTop(id);
+    }
 }

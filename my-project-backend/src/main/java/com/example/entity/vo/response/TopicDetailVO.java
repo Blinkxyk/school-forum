@@ -15,6 +15,7 @@ public class TopicDetailVO {
     User user;
     Interact interact;
     Long comments;
+    Integer top;
 
     @Data
     @AllArgsConstructor

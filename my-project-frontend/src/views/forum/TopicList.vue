@@ -13,7 +13,7 @@ import {
     Microphone, CircleCheck, Star, FolderOpened, ArrowRightBold
 } from "@element-plus/icons-vue";
 import Weather from "@/components/Weather.vue";
-import {computed, reactive, ref, watch} from "vue";
+import {computed, onMounted, reactive, ref, watch} from "vue";
 import {get} from "@/net";
 import {ElMessage} from "element-plus";
 import TopicEditor from "@/components/TopicEditor.vue";
@@ -60,6 +60,13 @@ function updateList(){
     })
 }
 
+function updateForumNotification(content){
+    get(`/api/forum/update-forum-notification?content=${content}`, () =>{
+        ElMessage.success('置顶信息更新成功！')
+    })
+
+}
+
 function onTopicCreate() {
     editor.value = false
     resetList()
@@ -90,6 +97,20 @@ navigator.geolocation.getCurrentPosition(position => {
     timeout: 3000,
     enableHighAccuracy: true
 })
+const notification = ref('加载中...'); // 初始化通知为加载中状态
+
+// 当组件挂载后立即获取论坛公告
+onMounted(async () => {
+    get(`/api/forum/get-forum-notification`,
+        (data) => {
+            notification.value = data;
+        },
+        (message, status) => {
+            console.warn(`Failed to fetch notification: ${message} (Status: ${status})`);
+            notification.value = 'Failed to load notification. Please try again later.';
+        }
+    );
+});
 </script>
 
 <template>
@@ -171,17 +192,37 @@ navigator.geolocation.getCurrentPosition(position => {
                         <el-icon style="transform: translateY(3px)"><ArrowRightBold/></el-icon>
                     </div>
                 </light-card>
-                <light-card style="margin-top: 10px">
+                <light-card style="margin-top: 10px"
+                            v-if="store.user.role === 'user'">
                     <div style="font-weight: bold">
                         <el-icon><CollectionTag/></el-icon>
                         论坛公告
                     </div>
                     <el-divider style="margin: 10px 0"/>
                     <div style="font-size: 14px;margin: 10px;color: grey">
-                        为认真学习宣传贯彻党的二十大精神,深入贯彻习近平强军思想,
-                        作为迎接办学70周年系列学术活动之一,国防科技大学将于2022年11月24日至26日在长沙举办“国防科技
+                        {{notification}}
                     </div>
                 </light-card>
+                    <light-card style="margin-top: 10px"
+                                v-if="store.user.role === 'admin'">
+                        <div style="font-weight: bold">
+                            <el-icon><CollectionTag/></el-icon>
+                            论坛公告
+                        </div>
+                        <el-divider style="margin: 10px 0"/>
+                        <!-- 可编辑的文本区域 -->
+                        <el-input
+                            type="textarea"
+                            :rows="9"
+                            placeholder="输入公告内容"
+                            v-model="notification"
+                            style="margin: 10px; color: grey; font-size: 14px;">
+                        </el-input>
+                        <!-- 保存按钮 -->
+                        <el-button type="primary" @click="updateForumNotification(notification)">更新公告</el-button>
+                    </light-card>
+
+
                 <light-card style="margin-top: 10px">
                     <div style="font-weight: bold">
                         <el-icon><Calendar/></el-icon>

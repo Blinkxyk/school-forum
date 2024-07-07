@@ -10,6 +10,7 @@ import com.example.entity.vo.request.AddCommentVO;
 import com.example.entity.vo.request.TopicCreateVO;
 import com.example.entity.vo.request.TopicUpdateVO;
 import com.example.entity.vo.response.*;
+import com.example.service.NotificationService;
 import com.example.service.TopicService;
 import com.example.service.WeatherService;
 import com.example.utils.Const;
@@ -19,6 +20,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -35,6 +38,9 @@ public class ForumController {
 
     @Resource
     TopicService topicService;
+
+    @Resource
+    NotificationService notificationService;
 
     @Resource
     ControllerUtils utils;
@@ -134,7 +140,7 @@ public class ForumController {
 
     @GetMapping("/my-topic")
     public RestBean<List<TopicPreviewVO>> searchMyTopic(@RequestParam int uid) {
-        List<Topic> topics = topicService.searchMyTopic(uid);
+        List<TopicWithUserInfo > topics = topicService.searchMyTopic(uid);
         if (topics.isEmpty()) {
             return RestBean.success(Collections.emptyList());
         }
@@ -170,6 +176,22 @@ public class ForumController {
         return RestBean.success();
     }
 
+    @GetMapping("/set-top")
+    public RestBean<Void> setTop(@RequestParam int id) {
+            topicService.setTop(id);
+        return RestBean.success();
+    }
 
+    @GetMapping("/get-forum-notification")
+    public RestBean<String> getNotification() {
+        String notification = notificationService.getForumNotification();
+        return RestBean.success(notification);
+    }
+
+    @GetMapping("/update-forum-notification")
+    public RestBean<Void> updateForumNotification(@RequestParam String content) {
+        notificationService.updateForumNotification(content);
+        return RestBean.success();
+    }
 
 }
